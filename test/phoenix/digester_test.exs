@@ -28,7 +28,14 @@ defmodule Phoenix.DigesterTest do
       Path.join(output_path, "manifest.json")
       |> File.read!()
       |> Poison.decode!()
+
     assert json["latest"]["phoenix.png"] =~ ~r"phoenix-[a-fA-F\d]{32}.png"
+    assert json["version"] == 1
+    assert json["digests"] == %{}
+  end
+
+  test "concats existing manifest to digest and add new files to latest" do
+
   end
 
   test "digests and compress nested files" do

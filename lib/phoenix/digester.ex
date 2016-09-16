@@ -52,7 +52,14 @@ defmodule Phoenix.Digester do
                    manifest_join(file.relative_path, file.digested_filename))
     end)
 
-    manifest_content = Poison.encode!(%{latest: entries}, [])
+    digests = if File.exists?("#{output_path}/manifest.json") do
+      # parse existing and concat latest to digests
+    else
+      %{}
+    end
+
+    manifest_content = Poison.encode!(%{latest: entries, version: 1, digests: digests}, [])
+
     File.write!(Path.join(output_path, "manifest.json"), manifest_content)
 
     entries
